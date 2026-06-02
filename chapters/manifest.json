@@ -1,25 +1,53 @@
 {
-  "title": "我在藏經閣當首席檢索官",
-  "subtitle": "林知行的 RAG 修行錄",
-  "author": "為 coolkid 量身打造",
-  "chapters": [
-    { "id": "ch01", "title": "第 1 章　幻覺",   "file": "ch01.md" },
-    { "id": "ch02", "title": "第 2 章　切典",   "file": "ch02.md" },
-    { "id": "ch03", "title": "第 3 章　識意",   "file": "ch03.md" },
-    { "id": "ch04", "title": "第 4 章　萬卷盤", "file": "ch04.md" },
-    { "id": "ch05", "title": "第 5 章　重判",   "file": "ch05.md" },
-    { "id": "ch06", "title": "第 6 章　配劑",   "file": "ch06.md" },
-    { "id": "ch07", "title": "第 7 章　譯問",   "file": "ch07.md" },
-    { "id": "ch08", "title": "第 8 章　拷問",   "file": "ch08.md" },
-    { "id": "ch09", "title": "第 9 章　連環問", "file": "ch09.md" },
-    { "id": "ch10", "title": "第 10 章　開壇", "file": "ch10.md" },
-    { "id": "ch11", "title": "第 11 章　制法（第二卷起）", "file": "ch11.md" },
-    { "id": "ch12", "title": "第 12 章　鑄典", "file": "ch12.md" },
-    { "id": "ch13", "title": "第 13 章　長軸", "file": "ch13.md" },
-    { "id": "ch14", "title": "第 14 章　群脈", "file": "ch14.md" },
-    { "id": "ch15", "title": "第 15 章　通感", "file": "ch15.md" },
-    { "id": "ch16", "title": "第 16 章　御外", "file": "ch16.md" },
-    { "id": "ch17", "title": "第 17 章　傳燈（全卷終）", "file": "ch17.md" },
-    { "id": "appendix", "title": "附錄　英文名詞索引", "file": "appendix.md" }
+  "title": "coolkid 的閱讀器",
+  "subtitle": "小說型學習材料",
+  "books": [
+    {
+      "id": "rag",
+      "title": "我在藏經閣當首席檢索官",
+      "subtitle": "林知行的 RAG 修行錄",
+      "status": "完結",
+      "chapters": [
+        { "id": "ch01", "title": "第 1 章　幻覺",   "file": "ch01.md" },
+        { "id": "ch02", "title": "第 2 章　切典",   "file": "ch02.md" },
+        { "id": "ch03", "title": "第 3 章　識意",   "file": "ch03.md" },
+        { "id": "ch04", "title": "第 4 章　萬卷盤", "file": "ch04.md" },
+        { "id": "ch05", "title": "第 5 章　重判",   "file": "ch05.md" },
+        { "id": "ch06", "title": "第 6 章　配劑",   "file": "ch06.md" },
+        { "id": "ch07", "title": "第 7 章　譯問",   "file": "ch07.md" },
+        { "id": "ch08", "title": "第 8 章　拷問",   "file": "ch08.md" },
+        { "id": "ch09", "title": "第 9 章　連環問", "file": "ch09.md" },
+        { "id": "ch10", "title": "第 10 章　開壇", "file": "ch10.md" },
+        { "id": "ch11", "title": "第 11 章　制法（第二卷起）", "file": "ch11.md" },
+        { "id": "ch12", "title": "第 12 章　鑄典", "file": "ch12.md" },
+        { "id": "ch13", "title": "第 13 章　長軸", "file": "ch13.md" },
+        { "id": "ch14", "title": "第 14 章　群脈", "file": "ch14.md" },
+        { "id": "ch15", "title": "第 15 章　通感", "file": "ch15.md" },
+        { "id": "ch16", "title": "第 16 章　御外", "file": "ch16.md" },
+        { "id": "ch17", "title": "第 17 章　傳燈（全卷終）", "file": "ch17.md" },
+        { "id": "appendix", "title": "附錄　英文名詞索引", "file": "appendix.md" }
+      ]
+    },
+    {
+      "id": "crm",
+      "title": "我在商會當首席記事使",
+      "subtitle": "陸瀚的 CRM 系統錄",
+      "status": "連載中",
+      "chapters": [
+        { "id": "ch01", "title": "第 1 章　失帳",   "file": "ch01.md" },
+        { "id": "ch02", "title": "第 2 章　識人",   "file": "ch02.md" },
+        { "id": "ch03", "title": "第 3 章　識號",   "file": "ch03.md" },
+        { "id": "ch04", "title": "第 4 章　識事",   "file": "ch04.md" },
+        { "id": "ch05", "title": "第 5 章　結拍",   "file": "ch05.md" },
+        { "id": "ch06", "title": "第 6 章　通籙",   "file": "ch06.md" },
+        { "id": "ch07", "title": "第 7 章　籙令",   "file": "ch07.md" },
+        { "id": "ch08", "title": "第 8 章　接外",   "file": "ch08.md" },
+        { "id": "ch09", "title": "第 9 章　重契",   "file": "ch09.md" },
+        { "id": "ch10", "title": "第 10 章　析數", "file": "ch10.md" },
+        { "id": "ch11", "title": "第 11 章　護密", "file": "ch11.md" },
+        { "id": "ch12", "title": "第 12 章　開市", "file": "ch12.md" },
+        { "id": "appendix", "title": "附錄　英文名詞索引", "file": "appendix.md" }
+      ]
+    }
   ]
 }

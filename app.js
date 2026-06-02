@@ -1,5 +1,5 @@
 /* =========================================
-   藏經閣讀經器
+   coolkid 的閱讀器（多本書版）
    ========================================= */
 const STORAGE_KEY = 'tibetan-reader-state';
 const FONT_MIN = -2;
@@ -7,7 +7,8 @@ const FONT_MAX = 4;
 
 const state = {
   manifest: null,
-  currentIdx: 0,
+  currentBookIdx: 0,
+  currentChapterIdx: 0,
   fontStep: 0,
   theme: 'dark',
 };
@@ -27,15 +28,29 @@ async function init() {
     return;
   }
 
+  // schema migration: 舊版只有 chapters，沒有 books
+  if (!state.manifest.books && state.manifest.chapters) {
+    state.manifest.books = [{
+      id: 'main',
+      title: state.manifest.title,
+      subtitle: state.manifest.subtitle || '',
+      status: '',
+      chapters: state.manifest.chapters,
+    }];
+  }
+
   document.title = state.manifest.title;
   renderChapterList();
 
   const saved = readSaved();
-  const startIdx = Math.min(
-    Math.max(saved.lastChapter ?? 0, 0),
-    state.manifest.chapters.length - 1
+  const startBookIdx = clampIdx(saved.lastBook ?? 0, state.manifest.books.length);
+  const startChapterIdx = clampIdx(
+    saved.lastChapterByBook?.[state.manifest.books[startBookIdx].id] ?? 0,
+    state.manifest.books[startBookIdx].chapters.length
   );
-  await loadChapter(startIdx);
+  state.currentBookIdx = startBookIdx;
+  state.currentChapterIdx = startChapterIdx;
+  await loadChapter(startBookIdx, startChapterIdx);
 
   bindUI();
 }
@@ -56,39 +71,72 @@ function loadState() {
   state.theme = saved.theme === 'light' ? 'light' : 'dark';
 }
 function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+function clampIdx(v, length) {
+  const n = Number(v) || 0;
+  return Math.max(0, Math.min(length - 1, n));
+}
 
 /* ---------- chapter list ---------- */
 function renderChapterList() {
   const ol = document.getElementById('chaptersOl');
   ol.innerHTML = '';
-  state.manifest.chapters.forEach((ch, i) => {
-    const li = document.createElement('li');
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.textContent = ch.title;
-    btn.dataset.idx = String(i);
-    btn.addEventListener('click', () => {
-      loadChapter(i);
-      closeChapterList();
+
+  state.manifest.books.forEach((book, bookIdx) => {
+    // 書名 group heading
+    const group = document.createElement('li');
+    group.className = 'book-group';
+    const header = document.createElement('div');
+    header.className = 'book-group-header';
+    const titleEl = document.createElement('p');
+    titleEl.className = 'book-group-title';
+    titleEl.textContent = book.title;
+    const subEl = document.createElement('p');
+    subEl.className = 'book-group-subtitle';
+    const statusBadge = book.status ? ` · ${book.status}` : '';
+    subEl.textContent = (book.subtitle || '') + statusBadge;
+    header.appendChild(titleEl);
+    header.appendChild(subEl);
+    group.appendChild(header);
+
+    // chapter list under this book
+    const ul = document.createElement('ol');
+    ul.className = 'book-group-items';
+    book.chapters.forEach((ch, chapterIdx) => {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = ch.title;
+      btn.dataset.bookIdx = String(bookIdx);
+      btn.dataset.chapterIdx = String(chapterIdx);
+      btn.addEventListener('click', () => {
+        loadChapter(bookIdx, chapterIdx);
+        closeChapterList();
+      });
+      li.appendChild(btn);
+      ul.appendChild(li);
     });
-    li.appendChild(btn);
-    ol.appendChild(li);
+    group.appendChild(ul);
+    ol.appendChild(group);
   });
 }
 
 /* ---------- chapter loading ---------- */
-async function loadChapter(idx) {
+async function loadChapter(bookIdx, chapterIdx) {
   if (!state.manifest) return;
-  if (idx < 0 || idx >= state.manifest.chapters.length) return;
-  state.currentIdx = idx;
-  const ch = state.manifest.chapters[idx];
+  if (bookIdx < 0 || bookIdx >= state.manifest.books.length) return;
+  const book = state.manifest.books[bookIdx];
+  if (chapterIdx < 0 || chapterIdx >= book.chapters.length) return;
+
+  state.currentBookIdx = bookIdx;
+  state.currentChapterIdx = chapterIdx;
+  const ch = book.chapters[chapterIdx];
 
   const content = document.getElementById('content');
   content.innerHTML = '<div class="loading" role="status" aria-label="載入中"><span class="loading-sigil" aria-hidden="true">❖</span></div>';
 
   let md;
   try {
-    const res = await fetch('chapters/' + ch.file, { cache: 'no-cache' });
+    const res = await fetch(`chapters/${book.id}/${ch.file}`, { cache: 'no-cache' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     md = await res.text();
   } catch (e) {
@@ -109,23 +157,68 @@ async function loadChapter(idx) {
   void content.offsetWidth;
   content.style.animation = '';
 
-  // restore scroll position
+  // restore scroll for (book, chapter)
   const saved = readSaved();
   const scrolls = saved.scrolls || {};
-  window.scrollTo(0, scrolls[ch.id] || 0);
+  const key = `${book.id}/${ch.id}`;
+  window.scrollTo(0, scrolls[key] || 0);
+
+  // update brand to current book
+  updateBrand(book);
 
   // update list highlight
   document.querySelectorAll('#chaptersOl button').forEach((b) => {
-    b.classList.toggle('active', Number(b.dataset.idx) === idx);
+    const active = Number(b.dataset.bookIdx) === bookIdx && Number(b.dataset.chapterIdx) === chapterIdx;
+    b.classList.toggle('active', active);
   });
 
-  // nav buttons
-  document.getElementById('prevChap').disabled = idx === 0;
-  document.getElementById('nextChap').disabled = idx === state.manifest.chapters.length - 1;
-  document.getElementById('navProgress').textContent =
-    String(idx + 1).padStart(2, '0') + ' / ' + String(state.manifest.chapters.length).padStart(2, '0');
+  // nav buttons (跨書翻頁)
+  const prevExists = !(bookIdx === 0 && chapterIdx === 0);
+  const isLastChapter = chapterIdx === book.chapters.length - 1;
+  const isLastBook = bookIdx === state.manifest.books.length - 1;
+  const nextExists = !(isLastChapter && isLastBook);
+  document.getElementById('prevChap').disabled = !prevExists;
+  document.getElementById('nextChap').disabled = !nextExists;
 
-  saveState({ lastChapter: idx });
+  // progress: current chapter / total in current book
+  document.getElementById('navProgress').textContent =
+    `${book.id.toUpperCase()} ` +
+    String(chapterIdx + 1).padStart(2, '0') + ' / ' + String(book.chapters.length).padStart(2, '0');
+
+  // persist last position
+  const lastChapterByBook = saved.lastChapterByBook || {};
+  lastChapterByBook[book.id] = chapterIdx;
+  saveState({ lastBook: bookIdx, lastChapterByBook });
+}
+
+function updateBrand(book) {
+  const titleEl = document.querySelector('.brand-title');
+  const subEl = document.querySelector('.brand-subtitle');
+  if (titleEl) titleEl.textContent = book.title;
+  if (subEl) subEl.textContent = book.subtitle || '';
+}
+
+function gotoPrev() {
+  const bookIdx = state.currentBookIdx;
+  const chapterIdx = state.currentChapterIdx;
+  if (chapterIdx > 0) {
+    loadChapter(bookIdx, chapterIdx - 1);
+  } else if (bookIdx > 0) {
+    // 跳到上一本書最後一章
+    const prevBook = state.manifest.books[bookIdx - 1];
+    loadChapter(bookIdx - 1, prevBook.chapters.length - 1);
+  }
+}
+function gotoNext() {
+  const bookIdx = state.currentBookIdx;
+  const chapterIdx = state.currentChapterIdx;
+  const book = state.manifest.books[bookIdx];
+  if (chapterIdx < book.chapters.length - 1) {
+    loadChapter(bookIdx, chapterIdx + 1);
+  } else if (bookIdx < state.manifest.books.length - 1) {
+    // 跳到下一本書第一章
+    loadChapter(bookIdx + 1, 0);
+  }
 }
 
 function showError(msg) {
@@ -159,6 +252,12 @@ function openChapterList() {
   list.setAttribute('aria-hidden', 'false');
   overlay.setAttribute('aria-hidden', 'false');
   btn.setAttribute('aria-expanded', 'true');
+
+  // 自動捲到目前章節
+  setTimeout(() => {
+    const active = list.querySelector('button.active');
+    if (active) active.scrollIntoView({ block: 'center', behavior: 'auto' });
+  }, 50);
 }
 function closeChapterList() {
   const list = document.getElementById('chapterList');
@@ -192,25 +291,28 @@ function bindUI() {
     applyTheme(state.theme === 'dark' ? 'light' : 'dark');
     saveState({ theme: state.theme });
   });
-  document.getElementById('prevChap').addEventListener('click', () => loadChapter(state.currentIdx - 1));
-  document.getElementById('nextChap').addEventListener('click', () => loadChapter(state.currentIdx + 1));
+  document.getElementById('prevChap').addEventListener('click', gotoPrev);
+  document.getElementById('nextChap').addEventListener('click', gotoNext);
 
-  // keyboard nav
+  // keyboard
   document.addEventListener('keydown', (e) => {
     const tag = e.target && e.target.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-    if (e.key === 'ArrowLeft') loadChapter(state.currentIdx - 1);
-    else if (e.key === 'ArrowRight') loadChapter(state.currentIdx + 1);
+    if (e.key === 'ArrowLeft') gotoPrev();
+    else if (e.key === 'ArrowRight') gotoNext();
     else if (e.key === 'Escape') closeChapterList();
   });
 
-  // save scroll position (prefer scrollend, fallback to throttled scroll)
+  // save scroll position
   const saveScroll = () => {
-    const ch = state.manifest && state.manifest.chapters[state.currentIdx];
+    if (!state.manifest) return;
+    const book = state.manifest.books[state.currentBookIdx];
+    if (!book) return;
+    const ch = book.chapters[state.currentChapterIdx];
     if (!ch) return;
     const saved = readSaved();
     const scrolls = saved.scrolls || {};
-    scrolls[ch.id] = window.scrollY;
+    scrolls[`${book.id}/${ch.id}`] = window.scrollY;
     saveState({ scrolls });
   };
 

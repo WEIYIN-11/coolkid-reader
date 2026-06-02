@@ -217,40 +217,70 @@ button {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+.book-group {
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+.book-group-header {
+  padding: 8px 4px 12px;
+  border-bottom: 1px solid var(--accent);
+  margin-bottom: 8px;
+}
+.book-group-title {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 2px;
+  letter-spacing: 0.04em;
+}
+.book-group-subtitle {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin: 0;
+  letter-spacing: 0.08em;
+}
+.book-group-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   counter-reset: chapter;
 }
-.chapter-list-items li {
+.book-group-items li {
   counter-increment: chapter;
 }
-.chapter-list-items button {
+.book-group-items button {
   display: flex;
   align-items: baseline;
   gap: 14px;
   width: 100%;
-  padding: 14px 12px;
+  padding: 12px 10px;
   background: transparent;
   color: var(--text);
   border: 0;
   border-bottom: 1px dashed var(--border);
   font-family: var(--serif);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   text-align: left;
   transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
-.chapter-list-items button::before {
+.book-group-items button::before {
   content: counter(chapter, decimal-leading-zero);
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: var(--text-dim);
   letter-spacing: 0.1em;
   flex-shrink: 0;
 }
-.chapter-list-items button:hover,
-.chapter-list-items button.active {
+.book-group-items button:hover,
+.book-group-items button.active {
   background: var(--accent-soft);
   color: var(--accent);
 }
-.chapter-list-items button.active::before {
+.book-group-items button.active::before {
   color: var(--accent);
 }
 
