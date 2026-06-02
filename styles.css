@@ -571,7 +571,7 @@ button {
   opacity: 0.6;
 }
 
-/* 字級保險條：強制 .content 內所有文字繼承容器的 font-size */
+/* 字級保險條：直接從 CSS variable 讀，不靠繼承 */
 .content,
 .content p,
 .content li,
@@ -580,7 +580,7 @@ button {
 .notes-box li,
 .takeaway-box p,
 .takeaway-box li {
-  font-size: inherit;
+  font-size: var(--font-size) !important;
 }
 
 /* =========================================

@@ -232,16 +232,20 @@ function applyFont() {
   const size = base + state.fontStep * 2;
   const sizeStr = size + 'px';
 
-  // 四重保險：CSS variable + body inline + content inline + !important
-  // 不改 documentElement.style.fontSize，否則所有 rem (標題/按鈕/邊距) 都會被放大
+  // 四重保險：CSS variable + body inline + content inline + CSS !important
   document.documentElement.style.setProperty('--font-size', sizeStr);
   document.body.style.setProperty('font-size', sizeStr, 'important');
   const content = document.getElementById('content');
   if (content) content.style.setProperty('font-size', sizeStr, 'important');
 
-  // Debug indicator
-  const dbg = document.getElementById('fontDebug');
-  if (dbg) dbg.textContent = `字級 ${size}px ｜ step ${state.fontStep}`;
+  // Debug：等渲染後讀「實測值」、比對「設定值」
+  requestAnimationFrame(() => {
+    const dbg = document.getElementById('fontDebug');
+    if (!dbg) return;
+    const firstP = document.querySelector('#content p');
+    const measured = firstP ? getComputedStyle(firstP).fontSize : '無段落';
+    dbg.textContent = `設 ${sizeStr} ｜ 實測 p = ${measured} ｜ step ${state.fontStep}`;
+  });
 }
 
 function applyTheme(theme) {
