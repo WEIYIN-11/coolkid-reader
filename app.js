@@ -230,13 +230,18 @@ function showError(msg) {
 function applyFont() {
   const base = 18;
   const size = base + state.fontStep * 2;
-  // 三重保險：CSS variable + body inline + content inline
-  // 避免 mobile Safari 在 media query :root override 跟 inline CSS variable 之間的衝突
+  const sizeStr = size + 'px';
+
+  // 四重保險：CSS variable + body inline + content inline + !important
   // 不改 documentElement.style.fontSize，否則所有 rem (標題/按鈕/邊距) 都會被放大
-  document.documentElement.style.setProperty('--font-size', size + 'px');
-  document.body.style.fontSize = size + 'px';
+  document.documentElement.style.setProperty('--font-size', sizeStr);
+  document.body.style.setProperty('font-size', sizeStr, 'important');
   const content = document.getElementById('content');
-  if (content) content.style.fontSize = size + 'px';
+  if (content) content.style.setProperty('font-size', sizeStr, 'important');
+
+  // Debug indicator
+  const dbg = document.getElementById('fontDebug');
+  if (dbg) dbg.textContent = `字級 ${size}px ｜ step ${state.fontStep}`;
 }
 
 function applyTheme(theme) {

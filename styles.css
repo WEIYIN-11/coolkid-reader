@@ -562,6 +562,26 @@ button {
   letter-spacing: 0.18em;
   margin: 0;
 }
+.footer-debug {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  margin: 8px 0 0;
+  opacity: 0.6;
+}
+
+/* 字級保險條：強制 .content 內所有文字繼承容器的 font-size */
+.content,
+.content p,
+.content li,
+.content blockquote p,
+.notes-box p,
+.notes-box li,
+.takeaway-box p,
+.takeaway-box li {
+  font-size: inherit;
+}
 
 /* =========================================
    Loading
