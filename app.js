@@ -230,7 +230,13 @@ function showError(msg) {
 function applyFont() {
   const base = 18;
   const size = base + state.fontStep * 2;
+  // 三重保險：CSS variable + body inline + content inline
+  // 避免 mobile Safari 在 media query :root override 跟 inline CSS variable 之間的衝突
+  // 不改 documentElement.style.fontSize，否則所有 rem (標題/按鈕/邊距) 都會被放大
   document.documentElement.style.setProperty('--font-size', size + 'px');
+  document.body.style.fontSize = size + 'px';
+  const content = document.getElementById('content');
+  if (content) content.style.fontSize = size + 'px';
 }
 
 function applyTheme(theme) {

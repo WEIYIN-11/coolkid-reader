@@ -600,7 +600,6 @@ button {
    ========================================= */
 @media (max-width: 640px) {
   :root {
-    --font-size: 17px;
     --topbar-h: 56px;
   }
   .topbar { padding: 0 12px; gap: 8px; }
