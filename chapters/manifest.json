@@ -32,7 +32,7 @@
       "id": "crm",
       "title": "我在商會當首席記事使",
       "subtitle": "陸瀚的 CRM 系統錄",
-      "status": "連載中",
+      "status": "完結",
       "chapters": [
         { "id": "ch01", "title": "第 1 章　失帳",   "file": "ch01.md" },
         { "id": "ch02", "title": "第 2 章　識人",   "file": "ch02.md" },
@@ -46,6 +46,27 @@
         { "id": "ch10", "title": "第 10 章　析數", "file": "ch10.md" },
         { "id": "ch11", "title": "第 11 章　護密", "file": "ch11.md" },
         { "id": "ch12", "title": "第 12 章　開市", "file": "ch12.md" },
+        { "id": "appendix", "title": "附錄　英文名詞索引", "file": "appendix.md" }
+      ]
+    },
+    {
+      "id": "agent",
+      "title": "我在雲書司當首席探子使",
+      "subtitle": "蕭決的 Agent 設計錄",
+      "status": "完結",
+      "chapters": [
+        { "id": "ch01", "title": "第 1 章　失令", "file": "ch01.md" },
+        { "id": "ch02", "title": "第 2 章　立志", "file": "ch02.md" },
+        { "id": "ch03", "title": "第 3 章　持械", "file": "ch03.md" },
+        { "id": "ch04", "title": "第 4 章　推步", "file": "ch04.md" },
+        { "id": "ch05", "title": "第 5 章　謀篇", "file": "ch05.md" },
+        { "id": "ch06", "title": "第 6 章　記事", "file": "ch06.md" },
+        { "id": "ch07", "title": "第 7 章　內省", "file": "ch07.md" },
+        { "id": "ch08", "title": "第 8 章　群行", "file": "ch08.md" },
+        { "id": "ch09", "title": "第 9 章　圈籠", "file": "ch09.md" },
+        { "id": "ch10", "title": "第 10 章　試煉", "file": "ch10.md" },
+        { "id": "ch11", "title": "第 11 章　上場", "file": "ch11.md" },
+        { "id": "ch12", "title": "第 12 章　收劍（全卷終）", "file": "ch12.md" },
         { "id": "appendix", "title": "附錄　英文名詞索引", "file": "appendix.md" }
       ]
     }
