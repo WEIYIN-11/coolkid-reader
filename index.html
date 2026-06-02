@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e1a">
+  <meta name="description" content="林知行的 RAG 修行錄：一本邊讀邊學 RAG 的小說型教材。">
+  <title>我在藏經閣當首席檢索官</title>
+
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%230a0e1a'/><text x='32' y='44' font-family='serif' font-size='38' font-weight='700' text-anchor='middle' fill='%23c9a961'>藏</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="topbar" role="banner">
+    <button class="icon-btn" id="menuBtn" aria-label="開啟章節目錄" aria-expanded="false" aria-controls="chapterList">
+      <span aria-hidden="true">☰</span>
+    </button>
+
+    <div class="brand">
+      <div class="brand-sigil" aria-hidden="true">藏</div>
+      <div class="brand-text">
+        <p class="brand-title">我在藏經閣當首席檢索官</p>
+        <p class="brand-subtitle">林知行的 RAG 修行錄</p>
+      </div>
+    </div>
+
+    <div class="controls" role="group" aria-label="閱讀設定">
+      <button class="icon-btn" id="fontSmaller" aria-label="字級縮小"><span aria-hidden="true">A−</span></button>
+      <button class="icon-btn" id="fontLarger" aria-label="字級放大"><span aria-hidden="true">A+</span></button>
+      <button class="icon-btn" id="themeToggle" aria-label="切換明暗主題"><span aria-hidden="true">☾</span></button>
+    </div>
+  </header>
+
+  <aside id="chapterList" class="chapter-list" aria-label="章節目錄" aria-hidden="true">
+    <p class="chapter-list-heading">章節目錄</p>
+    <ol id="chaptersOl" class="chapter-list-items"></ol>
+  </aside>
+
+  <div id="overlay" class="overlay" aria-hidden="true"></div>
+
+  <main class="reader" id="reader">
+    <article id="content" class="content" aria-live="polite">
+      <div class="loading" role="status" aria-label="載入中">
+        <span class="loading-sigil" aria-hidden="true">❖</span>
+      </div>
+    </article>
+
+    <nav class="chapter-nav" aria-label="章節切換">
+      <button id="prevChap" class="nav-btn" disabled>
+        <span class="nav-arrow" aria-hidden="true">←</span>
+        <span class="nav-label">上一章</span>
+      </button>
+      <p class="nav-progress" id="navProgress" aria-live="polite"></p>
+      <button id="nextChap" class="nav-btn" disabled>
+        <span class="nav-label">下一章</span>
+        <span class="nav-arrow" aria-hidden="true">→</span>
+      </button>
+    </nav>
+  </main>
+
+  <footer class="footer">
+    <p class="footer-text">藏經閣讀經修行　|　為 coolkid 量身打造</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

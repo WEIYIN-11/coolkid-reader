@@ -1,0 +1,17 @@
+{
+  "title": "我在藏經閣當首席檢索官",
+  "subtitle": "林知行的 RAG 修行錄",
+  "author": "為 coolkid 量身打造",
+  "chapters": [
+    { "id": "ch01", "title": "第 1 章　幻覺",   "file": "ch01.md" },
+    { "id": "ch02", "title": "第 2 章　切典",   "file": "ch02.md" },
+    { "id": "ch03", "title": "第 3 章　識意",   "file": "ch03.md" },
+    { "id": "ch04", "title": "第 4 章　萬卷盤", "file": "ch04.md" },
+    { "id": "ch05", "title": "第 5 章　重判",   "file": "ch05.md" },
+    { "id": "ch06", "title": "第 6 章　配劑",   "file": "ch06.md" },
+    { "id": "ch07", "title": "第 7 章　譯問",   "file": "ch07.md" },
+    { "id": "ch08", "title": "第 8 章　拷問",   "file": "ch08.md" },
+    { "id": "ch09", "title": "第 9 章　連環問", "file": "ch09.md" },
+    { "id": "ch10", "title": "第 10 章　開壇", "file": "ch10.md" }
+  ]
+}
