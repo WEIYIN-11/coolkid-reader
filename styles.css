@@ -356,6 +356,15 @@ button {
 .content p {
   margin: 0 0 1.2em;
   text-indent: 2em;
+  text-align: justify;
+  text-justify: inter-character;
+  word-break: break-word;
+  hanging-punctuation: allow-end;
+}
+.content li,
+.content blockquote p {
+  text-align: justify;
+  text-justify: inter-character;
   word-break: break-word;
 }
 .content blockquote {
