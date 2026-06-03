@@ -631,13 +631,16 @@ button {
     padding: 0 8px;
     font-size: 0.8rem;
   }
-  .reader { padding: 28px 18px 32px; }
+  .reader { padding: 28px 14px 32px; }
   .content h1 { margin: 8px 0 40px; }
   .notes-box, .takeaway-box {
-    padding: 24px 20px 18px;
+    padding: 24px 14px 18px;
     margin: 40px 0;
   }
+  .notes-box ul { padding-left: 18px; }
+  .takeaway-box ol { padding-left: 20px; }
+  .takeaway-box li { padding-left: 4px; }
   .nav-btn { padding: 10px 14px; font-size: 0.85rem; }
   .nav-progress { display: none; }
-  .footer { padding: 24px 18px 36px; }
+  .footer { padding: 24px 14px 36px; }
 }

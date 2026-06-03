@@ -238,14 +238,9 @@ function applyFont() {
   const content = document.getElementById('content');
   if (content) content.style.setProperty('font-size', sizeStr, 'important');
 
-  // Debug：等渲染後讀「實測值」、比對「設定值」
-  requestAnimationFrame(() => {
-    const dbg = document.getElementById('fontDebug');
-    if (!dbg) return;
-    const firstP = document.querySelector('#content p');
-    const measured = firstP ? getComputedStyle(firstP).fontSize : '無段落';
-    dbg.textContent = `設 ${sizeStr} ｜ 實測 p = ${measured} ｜ step ${state.fontStep}`;
-  });
+  // Footer 顯示當前字級
+  const dbg = document.getElementById('fontDebug');
+  if (dbg) dbg.textContent = `字級 ${sizeStr}`;
 }
 
 function applyTheme(theme) {
