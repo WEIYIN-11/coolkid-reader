@@ -35,7 +35,7 @@ CRM 系統處理的「**有意義的物件**」。Contact、Company、Activity�
 還沒成為「客戶」的潛在對象。MQL、SQL 是 lead 的不同階段（見「銷售管道」區）。
 
 **▍Junction Table / Bridge Table / Through Table**（連接表）
-處理「多對多」關係的中介表。陸瀚的「通籙」。
+處理「多對多」關係的中介表。尹知行的「通籙」。
 
 </div>
 
@@ -46,7 +46,7 @@ CRM 系統處理的「**有意義的物件**」。Contact、Company、Activity�
 ## 二、關係與資料庫設計
 
 **▍Foreign Key**（外鍵）
-一張表的欄位指向另一張表的主鍵。陸瀚的「引號令」。**CRM 所有 entity 之間的連接都靠 foreign key**。
+一張表的欄位指向另一張表的主鍵。尹知行的「引號令」。**CRM 所有 entity 之間的連接都靠 foreign key**。
 
 **▍Primary Key**（主鍵）
 一張表裡每筆紀錄的唯一識別。通常用 auto-increment 整數或 UUID。
@@ -88,7 +88,7 @@ CRM 系統處理的「**有意義的物件**」。Contact、Company、Activity�
 ## 三、銷售管道（Pipeline & Sales Process）
 
 **▍Pipeline**（漏斗 / 銷售管道）
-從「第一次接觸」到「成交」的所有階段。陸瀚的「探詢 → 報價 → 議價 → 立契 → 履約 → 完結」。
+從「第一次接觸」到「成交」的所有階段。尹知行的「探詢 → 報價 → 議價 → 立契 → 履約 → 完結」。
 
 **▍Stage**（階段）
 Pipeline 裡的每一步。常見 B2B SaaS：Discovery → Proposal → Negotiation → Closed Won/Lost。
@@ -109,7 +109,7 @@ Deal 的終結狀態。Closed Won = 成交、Closed Lost = 流失。
 每個階段「**最終會 Closed Won**」的歷史比率。乘上 deal 金額 = 加權預期收入。
 
 **▍Forecasting**（預測）
-根據 pipeline 算「**這季 / 下半年能收多少錢**」。陸瀚給屠東家的答案就是 forecasting。
+根據 pipeline 算「**這季 / 下半年能收多少錢**」。尹知行給屠東家的答案就是 forecasting。
 
 **▍Sales Velocity**（銷售速度）
 ```
@@ -126,7 +126,7 @@ Velocity = (deal 數 × 平均金額 × 成交率) / 平均週期天數
 ## 四、Activity 與互動
 
 **▍Activity Log / Timeline**（活動軌跡）
-所有跟某客戶相關的 activity，按時間排序。陸瀚的「事錄」。
+所有跟某客戶相關的 activity，按時間排序。尹知行的「事錄」。
 
 **▍Touchpoint**（接觸點）
 每一次跟客戶的「**有意義接觸**」。一條 activity = 一個 touchpoint。
@@ -155,7 +155,7 @@ Velocity = (deal 數 × 平均金額 × 成交率) / 平均週期天數
 ## 五、Workflow 與自動化
 
 **▍Workflow Automation**（工作流自動化）
-陸瀚的「籙令」。**當 X 發生，自動做 Y** 的規則集合。
+尹知行的「籙令」。**當 X 發生，自動做 Y** 的規則集合。
 
 **▍Trigger**（觸發事件）
 什麼動作或狀態變化觸發 workflow。常見：Record Created、Field Changed To、Time-based、External Event。
@@ -207,7 +207,7 @@ Pipedrive 的自動化，簡單明瞭，適合中小團隊。
 另一種 API 設計，**讓客戶端決定要哪些欄位**。複雜場景比 REST 靈活、簡單場景過度複雜。
 
 **▍Webhook**
-「**主動推**」訊息的方式。陸瀚的「通報桶」。外面系統在 CRM 註冊一個 URL，CRM 事件發生時 POST 到那個 URL。
+「**主動推**」訊息的方式。尹知行的「通報桶」。外面系統在 CRM 註冊一個 URL，CRM 事件發生時 POST 到那個 URL。
 
 **▍Polling vs Push**
 - *Polling*：每隔幾分鐘呼叫一次 API 看有沒有新資料
@@ -216,10 +216,10 @@ Pipedrive 的自動化，簡單明瞭，適合中小團隊。
 **Push 優於 Polling**，除非對方不支援 webhook。
 
 **▍Acknowledgement / ACK**（確認回應）
-接收方收到後**回應 HTTP 200**。發送方看到 200 才確認成功。陸瀚的「朱紅印章」。
+接收方收到後**回應 HTTP 200**。發送方看到 200 才確認成功。尹知行的「朱紅印章」。
 
 **▍Idempotency / Idempotency Key**（冪等性 / 冪等鍵）
-**同樣的訊息重複收到，只處理一次**。陸瀚的「通報號」。
+**同樣的訊息重複收到，只處理一次**。尹知行的「通報號」。
 
 **▍Retry / Exponential Backoff**（重試 / 指數退避）
 失敗了等多久後重推。常見：1s → 2s → 4s → 8s → 16s ⋯⋯ 最後放棄。
@@ -245,7 +245,7 @@ HTTP header 帶 token 做身分驗證：`Authorization: Bearer xxx`。
 ## 七、Dedup 與資料品質
 
 **▍Deduplication / Dedup**（去重）
-找出代表同一個實體的多筆紀錄，合併成一筆。陸瀚的「重契」。**最危險的 CRM 功能**。
+找出代表同一個實體的多筆紀錄，合併成一筆。尹知行的「重契」。**最危險的 CRM 功能**。
 
 **▍Master Record / Golden Record**（主筆 / 黃金紀錄）
 合併後的「**權威版本**」。所有其他紀錄合併進這一筆。
@@ -254,7 +254,7 @@ HTTP header 帶 token 做身分驗證：`Authorization: Bearer xxx`。
 合併時哪個欄位用哪邊的值。Take Newest、Take Most Complete、Concatenate、Manual Pick。
 
 **▍Audit Trail / Audit Log**（操作軌跡）
-每一次合併、改紀錄、刪紀錄都留下「**誰、何時、做了什麼**」。陸瀚的「翻閱簿」。
+每一次合併、改紀錄、刪紀錄都留下「**誰、何時、做了什麼**」。尹知行的「翻閱簿」。
 
 **▍Fuzzy Match**（模糊比對）
 不完全相同但相似的比對。常用演算法：
@@ -285,7 +285,7 @@ HTTP header 帶 token 做身分驗證：`Authorization: Bearer xxx`。
 ## 八、分析與報表
 
 **▍Analytics / Reporting**（分析 / 報表）
-從 CRM 資料看出規律。陸瀚的「算盤台」。
+從 CRM 資料看出規律。尹知行的「算盤台」。
 
 **▍Conversion Rate**（轉化率）
 每階段「進到下一階段」的比例。**找瓶頸、改善哪一步的依據**。
@@ -350,22 +350,22 @@ BI 工具。
 ## 九、安全與權限
 
 **▍RBAC**（Role-Based Access Control，角色權限控制）
-按「**角色**」決定能看什麼。陸瀚的「六種令牌」。
+按「**角色**」決定能看什麼。尹知行的「六種令牌」。
 
 **▍ABAC**（Attribute-Based Access Control，屬性權限控制）
 RBAC 之上的細粒度版本。看「**這筆資料的屬性 + 當下情境**」。
 
 **▍Field-Level Security**（欄位級安全）
-同一張紀錄，不同欄位給不同 role 看不同東西。陸瀚的「敏感欄位等級」。
+同一張紀錄，不同欄位給不同 role 看不同東西。尹知行的「敏感欄位等級」。
 
 **▍Principle of Least Privilege**（最小權限原則）
 給人「**剛好夠做事**」的權限，不要多。
 
 **▍Audit Log**（操作軌跡）
-誰看過、改過、刪過什麼，全部紀錄。陸瀚的「翻閱簿」。**必 immutable、必保留 7 年以上**。
+誰看過、改過、刪過什麼，全部紀錄。尹知行的「翻閱簿」。**必 immutable、必保留 7 年以上**。
 
 **▍Anomaly Detection**（異常偵測）
-監控使用者的「**正常基準**」，偏離太多警報。陸瀚捉趙午的方法。
+監控使用者的「**正常基準**」，偏離太多警報。尹知行捉趙午的方法。
 
 **▍SOC 2**（Service Organization Control 2）
 SaaS 業界常見的安全合規認證。簽企業客戶常要求。
@@ -538,6 +538,6 @@ Prosci 公司的五階段：Awareness、Desire、Knowledge、Ability、Reinforce
 2. **想知道某類工具有哪些** → 直接翻對應的區（第十一區 = CRM 產品、第八區 = 分析工具）。
 3. **要跟人介紹 CRM** → 把這份附錄當成「CRM 領域的最小單字本」。
 
-**這份附錄會持續更新**。讀正文遇到任何沒解釋到的英文詞、或解釋得不夠清楚的地方，告訴陸瀚（其實是叫我），下一版補進來。
+**這份附錄會持續更新**。讀正文遇到任何沒解釋到的英文詞、或解釋得不夠清楚的地方，告訴尹知行（其實是叫我），下一版補進來。
 
 </div>

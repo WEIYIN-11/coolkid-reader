@@ -1,6 +1,6 @@
 # 附錄　英文名詞索引
 
-Agent 卷正文出現的英文工具、術語、產品名，全部在這裡解釋一次。
+探子（Agent） 卷正文出現的英文工具、術語、產品名，全部在這裡解釋一次。
 
 按主題分十三區。
 
@@ -303,7 +303,7 @@ AWS 的 microVM、提供 sandbox 級隔離。
 ## 九、Multi-Agent Patterns
 
 **▍Supervisor-Worker**（督員）
-一個 supervisor、N 個 worker。蕭決的 orchestrator + 10 個探子。
+一個 supervisor、N 個 worker。尹知行的 orchestrator + 10 個探子。
 
 **▍Hierarchical Agent**（分層）
 Worker 自己再是 supervisor、底下有 sub-worker。
@@ -321,7 +321,7 @@ agents 輪流發言。
 大量同質 agent 各自探索、最終 consensus。
 
 **▍Blackboard / Shared State**
-共用的「**所有 agent 都看得到的地方**」**。蕭決的訊息台**。
+共用的「**所有 agent 都看得到的地方**」**。尹知行的訊息台**。
 
 **▍Orchestrator**
 協調 multi-agent 系統的中央決策者。
@@ -601,6 +601,6 @@ LLM 計算長度的單位。
 2. **想知道某類工具有哪些** → 直接翻對應的區（第六區 = agent 框架、第七區 = coding agents、第八區 = computer use）。
 3. **跨書術語** → RAG 卷附錄解釋 embedding / vector DB、CRM 卷附錄解釋 API / observability、Agent 卷附錄聚焦 agent 特有。
 
-**這份附錄會持續更新**。讀正文遇到任何沒解釋到的英文詞、或解釋得不夠清楚的地方、告訴蕭決，下一版補進來。
+**這份附錄會持續更新**。讀正文遇到任何沒解釋到的英文詞、或解釋得不夠清楚的地方、告訴尹知行，下一版補進來。
 
 </div>

@@ -9,6 +9,8 @@ const state = {
   manifest: null,
   currentBookIdx: 0,
   currentChapterIdx: 0,
+  menuView: 'chapters',   // 'books' | 'chapters'
+  menuBookIdx: 0,         // which book the menu currently shows chapters of
   fontStep: 0,
   theme: 'dark',
 };
@@ -40,7 +42,6 @@ async function init() {
   }
 
   document.title = state.manifest.title;
-  renderChapterList();
 
   const saved = readSaved();
   const startBookIdx = clampIdx(saved.lastBook ?? 0, state.manifest.books.length);
@@ -50,6 +51,9 @@ async function init() {
   );
   state.currentBookIdx = startBookIdx;
   state.currentChapterIdx = startChapterIdx;
+  state.menuBookIdx = startBookIdx;
+  renderBooksView();
+  renderChaptersView(startBookIdx);
   await loadChapter(startBookIdx, startChapterIdx);
 
   bindUI();
@@ -76,48 +80,118 @@ function clampIdx(v, length) {
   return Math.max(0, Math.min(length - 1, n));
 }
 
-/* ---------- chapter list ---------- */
-function renderChapterList() {
-  const ol = document.getElementById('chaptersOl');
+/* ---------- menu: books view ---------- */
+function bookSigil(book) {
+  if (book.sigil) return book.sigil;
+  // fallback: 「我在X...」取第 3 個字
+  const t = book.title || '';
+  return t.length >= 3 ? t.charAt(2) : (t.charAt(0) || '書');
+}
+
+function renderBooksView() {
+  const ol = document.getElementById('booksOl');
   ol.innerHTML = '';
 
   state.manifest.books.forEach((book, bookIdx) => {
-    // 書名 group heading
-    const group = document.createElement('li');
-    group.className = 'book-group';
-    const header = document.createElement('div');
-    header.className = 'book-group-header';
-    const titleEl = document.createElement('p');
-    titleEl.className = 'book-group-title';
-    titleEl.textContent = book.title;
-    const subEl = document.createElement('p');
-    subEl.className = 'book-group-subtitle';
-    const statusBadge = book.status ? ` · ${book.status}` : '';
-    subEl.textContent = (book.subtitle || '') + statusBadge;
-    header.appendChild(titleEl);
-    header.appendChild(subEl);
-    group.appendChild(header);
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'book-card';
+    if (bookIdx === state.currentBookIdx) btn.classList.add('active');
+    btn.dataset.bookIdx = String(bookIdx);
+    btn.setAttribute('aria-label', `${book.title}　${book.subtitle || ''}`);
 
-    // chapter list under this book
-    const ul = document.createElement('ol');
-    ul.className = 'book-group-items';
-    book.chapters.forEach((ch, chapterIdx) => {
-      const li = document.createElement('li');
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.textContent = ch.title;
-      btn.dataset.bookIdx = String(bookIdx);
-      btn.dataset.chapterIdx = String(chapterIdx);
-      btn.addEventListener('click', () => {
-        loadChapter(bookIdx, chapterIdx);
-        closeChapterList();
-      });
-      li.appendChild(btn);
-      ul.appendChild(li);
+    const sigil = document.createElement('span');
+    sigil.className = 'book-card-sigil';
+    sigil.textContent = bookSigil(book);
+    sigil.setAttribute('aria-hidden', 'true');
+
+    const textWrap = document.createElement('span');
+    textWrap.className = 'book-card-text';
+
+    const title = document.createElement('span');
+    title.className = 'book-card-title';
+    title.textContent = book.title;
+
+    const subtitle = document.createElement('span');
+    subtitle.className = 'book-card-subtitle';
+    subtitle.textContent = book.subtitle || '';
+
+    const meta = document.createElement('span');
+    meta.className = 'book-card-meta';
+    const parts = [`共 ${book.chapters.length} 篇`];
+    if (book.status) parts.push(book.status);
+    if (bookIdx === state.currentBookIdx) parts.push('閱讀中');
+    meta.textContent = parts.join(' · ');
+
+    textWrap.appendChild(title);
+    if (book.subtitle) textWrap.appendChild(subtitle);
+    textWrap.appendChild(meta);
+
+    const arrow = document.createElement('span');
+    arrow.className = 'book-card-arrow';
+    arrow.textContent = '›';
+    arrow.setAttribute('aria-hidden', 'true');
+
+    btn.appendChild(sigil);
+    btn.appendChild(textWrap);
+    btn.appendChild(arrow);
+
+    btn.addEventListener('click', () => {
+      showChaptersView(bookIdx);
     });
-    group.appendChild(ul);
-    ol.appendChild(group);
+
+    li.appendChild(btn);
+    ol.appendChild(li);
   });
+}
+
+/* ---------- menu: chapters view ---------- */
+function renderChaptersView(bookIdx) {
+  const book = state.manifest.books[bookIdx];
+  if (!book) return;
+
+  const statusBadge = book.status ? ` · ${book.status}` : '';
+  document.getElementById('chaptersViewTitle').textContent = book.title;
+  document.getElementById('chaptersViewSubtitle').textContent =
+    (book.subtitle || '') + statusBadge;
+
+  const ol = document.getElementById('chaptersOl');
+  ol.innerHTML = '';
+
+  book.chapters.forEach((ch, chapterIdx) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = ch.title;
+    btn.dataset.bookIdx = String(bookIdx);
+    btn.dataset.chapterIdx = String(chapterIdx);
+    if (bookIdx === state.currentBookIdx && chapterIdx === state.currentChapterIdx) {
+      btn.classList.add('active');
+    }
+    btn.addEventListener('click', () => {
+      loadChapter(bookIdx, chapterIdx);
+      closeChapterList();
+    });
+    li.appendChild(btn);
+    ol.appendChild(li);
+  });
+}
+
+/* ---------- menu: view switching ---------- */
+function showBooksView() {
+  state.menuView = 'books';
+  document.getElementById('booksView').hidden = false;
+  document.getElementById('chaptersView').hidden = true;
+  renderBooksView();
+}
+
+function showChaptersView(bookIdx) {
+  state.menuView = 'chapters';
+  state.menuBookIdx = bookIdx;
+  document.getElementById('booksView').hidden = true;
+  document.getElementById('chaptersView').hidden = false;
+  renderChaptersView(bookIdx);
 }
 
 /* ---------- chapter loading ---------- */
@@ -166,11 +240,20 @@ async function loadChapter(bookIdx, chapterIdx) {
   // update brand to current book
   updateBrand(book);
 
-  // update list highlight
+  // update list highlight (chapters view)
   document.querySelectorAll('#chaptersOl button').forEach((b) => {
     const active = Number(b.dataset.bookIdx) === bookIdx && Number(b.dataset.chapterIdx) === chapterIdx;
     b.classList.toggle('active', active);
   });
+  // update books view highlight (current book card)
+  document.querySelectorAll('#booksOl .book-card').forEach((b) => {
+    b.classList.toggle('active', Number(b.dataset.bookIdx) === bookIdx);
+  });
+  // if user switched book via menu, also refresh chapters view header to match
+  if (state.menuBookIdx !== bookIdx) {
+    state.menuBookIdx = bookIdx;
+    renderChaptersView(bookIdx);
+  }
 
   // nav buttons (跨書翻頁)
   const prevExists = !(bookIdx === 0 && chapterIdx === 0);
@@ -263,8 +346,16 @@ function openChapterList() {
   overlay.setAttribute('aria-hidden', 'false');
   btn.setAttribute('aria-expanded', 'true');
 
+  // 打開時預設顯示「目前正在閱讀的書」的章節列表
+  if (state.menuView === 'chapters') {
+    showChaptersView(state.currentBookIdx);
+  } else {
+    showBooksView();
+  }
+
   // 自動捲到目前章節
   setTimeout(() => {
+    list.scrollTop = 0;
     const active = list.querySelector('button.active');
     if (active) active.scrollIntoView({ block: 'center', behavior: 'auto' });
   }, 50);
@@ -286,6 +377,7 @@ function bindUI() {
     else openChapterList();
   });
   document.getElementById('overlay').addEventListener('click', closeChapterList);
+  document.getElementById('backToBooks').addEventListener('click', showBooksView);
 
   document.getElementById('fontSmaller').addEventListener('click', () => {
     state.fontStep = clamp(state.fontStep - 1, FONT_MIN, FONT_MAX);

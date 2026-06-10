@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=20260603e">
+  <link rel="stylesheet" href="styles.css?v=20260610a">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -38,9 +38,23 @@
     </div>
   </header>
 
-  <aside id="chapterList" class="chapter-list" aria-label="章節目錄" aria-hidden="true">
-    <p class="chapter-list-heading">章節目錄</p>
-    <ol id="chaptersOl" class="chapter-list-items"></ol>
+  <aside id="chapterList" class="chapter-list" aria-label="目錄" aria-hidden="true">
+    <div class="menu-view" id="booksView" data-view="books">
+      <p class="chapter-list-heading">書庫</p>
+      <ol id="booksOl" class="books-list"></ol>
+    </div>
+
+    <div class="menu-view" id="chaptersView" data-view="chapters" hidden>
+      <button type="button" class="back-to-books-btn" id="backToBooks" aria-label="返回書庫">
+        <span class="back-arrow" aria-hidden="true">←</span>
+        <span>書庫</span>
+      </button>
+      <div class="chapters-view-header">
+        <p class="chapters-view-title" id="chaptersViewTitle"></p>
+        <p class="chapters-view-subtitle" id="chaptersViewSubtitle"></p>
+      </div>
+      <ol id="chaptersOl" class="chapter-list-items"></ol>
+    </div>
   </aside>
 
   <div id="overlay" class="overlay" aria-hidden="true"></div>
@@ -71,6 +85,6 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
-  <script src="app.js?v=20260603e"></script>
+  <script src="app.js?v=20260610a"></script>
 </body>
 </html>
